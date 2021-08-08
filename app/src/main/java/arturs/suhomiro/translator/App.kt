@@ -1,15 +1,16 @@
 package arturs.suhomiro.translator
 
 import android.app.Application
-import arturs.suhomiro.translator.di.AppComponent
+import arturs.suhomiro.translator.di.application
+import arturs.suhomiro.translator.di.mainScreen
+import org.koin.core.context.startKoin
 
 class App : Application() {
 
-companion object{
-    lateinit var component: AppComponent
-}
     override fun onCreate() {
         super.onCreate()
-            //component = DaggerAppComponent.builder().build()
+        startKoin {
+            modules(application + mainScreen)
+        }
     }
 }

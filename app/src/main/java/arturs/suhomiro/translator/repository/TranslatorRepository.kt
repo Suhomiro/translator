@@ -1,8 +1,7 @@
 package arturs.suhomiro.translator.repository
 
 import arturs.suhomiro.translator.data.DataModel
-import io.reactivex.Observable
 
 interface TranslatorRepository {
-    fun fetchWords(searchWords: String): Observable<List<DataModel>>
+    suspend fun fetchWords(searchWords: String): List<DataModel>
 }

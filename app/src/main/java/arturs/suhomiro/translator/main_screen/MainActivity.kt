@@ -5,24 +5,17 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import arturs.suhomiro.translator.App
 import arturs.suhomiro.translator.R
 import arturs.suhomiro.translator.data.AppState
 import arturs.suhomiro.translator.data.DataModel
 import arturs.suhomiro.translator.main_screen.recycler_view.MainAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val  model: MainViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-    }
+    private val model: MainViewModel by viewModel()
 
     private val observer = Observer<AppState> { renderData(it) }
     private var adapter: MainAdapter? = null
@@ -34,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-       // App.component.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         model.getData().observe(this@MainActivity, observer)
