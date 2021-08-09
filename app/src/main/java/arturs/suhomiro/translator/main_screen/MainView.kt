@@ -1,4 +1,8 @@
 package arturs.suhomiro.translator.main_screen
 
-class MainView {
+import arturs.suhomiro.translator.data.DataModel
+
+interface MainView {
+    fun init(dataModel: List<DataModel>)
+    fun showError(error: Throwable)
 }
