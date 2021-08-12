@@ -1,6 +1,6 @@
 package arturs.suhomiro.translator.retrofit
 
-import arturs.suhomiro.translator.data.DataModel
+import arturs.suhomiro.translator.model.data.DataModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 
