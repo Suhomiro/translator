@@ -1,5 +1,8 @@
 package arturs.suhomiro.translator.screens.favorites_screen.recycler_view
 
+import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import arturs.suhomiro.translator.R
 import arturs.suhomiro.translator.model.data.FavoritesData
 import arturs.suhomiro.translator.model.data.getFavoritesData
-import arturs.suhomiro.translator.screens.AdapterViewModel
+import arturs.suhomiro.translator.screens.favorites_screen.FavoritesViewModel
 import arturs.suhomiro.translator.utils.fadeInAnimation
 import arturs.suhomiro.translator.utils.fadeOutAnimation
 import kotlinx.android.synthetic.main.favorites_item.view.*
 
 class FavoritesAdapter(
-    private val adapterItemMainViewModel: AdapterViewModel
+    private val favoritesViewModel: FavoritesViewModel
 ) : RecyclerView.Adapter<FavoritesAdapter.RecyclerItemViewHolder>() {
 
     private var data: MutableList<Pair<FavoritesData, Boolean>> = getFavoritesData()
@@ -47,13 +50,14 @@ class FavoritesAdapter(
 
         fun bind(data: Pair<FavoritesData, Boolean>) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
+                itemView.textViewFavoritesItemNote.text = data.first.note
                 itemView.textViewFavoritesItemHeader.text = data.first.word
                 //itemView.textViewDescriptionHistoryItem.text = data.meanings?.first()?.translation?.translation                    adapterItemMainViewModel.deleteData(data.first)
-
                 openMoreLayout(data)
                 editItemData(data)
                 cancelItemEdit(data)
                 deleteItemData(data)
+                updateItemData(data)
 
                 itemView.setOnClickListener {
                     Toast.makeText(itemView.context, "on click: ${data.first.word}", Toast.LENGTH_SHORT).show()
@@ -62,10 +66,10 @@ class FavoritesAdapter(
         }
 
         private fun cancelItemEdit(data: Pair<FavoritesData, Boolean>){
-            itemView.imageView4.setOnClickListener {
+            itemView.imageViewCancle.setOnClickListener {
                 if(data.second){
                     fadeOutAnimation(itemView.editTextTextMultiLineFavoritesNote)
-                    fadeOutAnimation(itemView.imageView4)
+                    fadeOutAnimation(itemView.imageViewCancle)
                     fadeOutAnimation(itemView.buttonItemFavoritesSave)
                     fadeInAnimation(itemView.buttonFavoritesItemEdit)
                 }
@@ -77,20 +81,47 @@ class FavoritesAdapter(
                 if(data.second){
                     fadeInAnimation(itemView.buttonItemFavoritesSave)
                     fadeInAnimation(itemView.editTextTextMultiLineFavoritesNote)
-                    fadeInAnimation(itemView.imageView4)
+                    fadeInAnimation(itemView.imageViewCancle)
                     fadeOutAnimation(itemView.buttonFavoritesItemEdit)
                 }
             }
         }
 
         private fun updateItemData(data: Pair<FavoritesData, Boolean>){
+                itemView.editTextTextMultiLineFavoritesNote.addTextChangedListener(object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
+                    }
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                       itemView.textViewFavoritesItemNote.text = itemView.editTextTextMultiLineFavoritesNote.text
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {
+                        itemView.buttonItemFavoritesSave.setOnClickListener {
+                            data.first.note = itemView.textViewFavoritesItemNote.text.toString()
+                            favoritesViewModel.updateData(data.first)
+                            fadeOutAnimation(itemView.buttonItemFavoritesSave)
+                            fadeOutAnimation(itemView.editTextTextMultiLineFavoritesNote)
+                            fadeOutAnimation(itemView.imageViewCancle)
+                            fadeInAnimation(itemView.buttonFavoritesItemEdit)
+                        }
+                    }
+
+                })
         }
 
         private fun deleteItemData(data: Pair<FavoritesData, Boolean>){
             itemView.imageViewFavoriteItemDelete.setOnClickListener {
-                adapterItemMainViewModel.deleteData(data.first)
-                removeItem()
+                fadeInAnimation(itemView.imageViewFavoriteItemDeleted)
+                fadeOutAnimation(itemView.imageViewFavoriteItemDelete)
+                Handler().postDelayed(
+                    {
+                        favoritesViewModel.deleteData(data.first)
+                        removeItem()
+                    },
+                    400
+                )
             }
         }
 

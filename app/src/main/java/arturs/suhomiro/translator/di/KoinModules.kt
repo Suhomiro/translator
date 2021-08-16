@@ -15,7 +15,6 @@ import arturs.suhomiro.translator.room.history_db.HistoryDataBase
 import arturs.suhomiro.translator.screens.favorites_screen.FavoritesViewModel
 import arturs.suhomiro.translator.screens.history_screen.HistoryViewModel
 import arturs.suhomiro.translator.screens.main_screen.MainViewModel
-import arturs.suhomiro.translator.screens.AdapterViewModel
 import arturs.suhomiro.translator.screens.search_history_screen.SearchHistoryViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -44,6 +43,11 @@ val application = module {
             RoomFavoritesDataSourceImpl(get())
         )
     }
+    single<FavoritesRepository>(named(NAME_FAVORITES_NAME)) {
+        FavoritesRepositoryImpl(
+            RoomFavoritesDataSourceImpl(get())
+        )
+    }
 }
 val mainScreen = module {
 
@@ -53,9 +57,7 @@ val mainScreen = module {
             repositoryLocal = get(qualifier = named(NAME_LOCAL))
         )
     }
-   viewModel {
-       AdapterViewModel(favoritesInteractorImpl = get())
-   }
+
     viewModel {
       MainViewModel(mainInteractorImpl = get())
     }

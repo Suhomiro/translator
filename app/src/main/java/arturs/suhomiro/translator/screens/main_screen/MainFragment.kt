@@ -13,10 +13,12 @@ import arturs.suhomiro.translator.R
 import arturs.suhomiro.translator.model.data.AppState
 import arturs.suhomiro.translator.model.data.DataModel
 import arturs.suhomiro.translator.screens.description_screen.DescriptionFragment
-import arturs.suhomiro.translator.screens.AdapterViewModel
+import arturs.suhomiro.translator.screens.favorites_screen.FavoritesViewModel
 import arturs.suhomiro.translator.screens.main_screen.recycler_view.MainAdapter
 import arturs.suhomiro.translator.screens.search_history_screen.SearchHistoryFragment
 import arturs.suhomiro.translator.utils.AlertDialogFragment
+import arturs.suhomiro.translator.utils.fadeInAnimation
+import arturs.suhomiro.translator.utils.fadeOutAnimation
 import arturs.suhomiro.translator.utils.isOnline
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.bottom_sheet_layout.*
@@ -30,7 +32,7 @@ class MainFragment : Fragment() {
     }
 
     private val dialogTag = "74a54328-5d62-46bf-ab6b-cbf5d8c79522"
-    private val modelAdapter: AdapterViewModel by viewModel()
+    private val modelAdapter: FavoritesViewModel by viewModel()
     private val model: MainViewModel by viewModel()
     private var isNetworkAvailable: Boolean = false
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -59,28 +61,21 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if(savedInstanceState == null) {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.bottom_sheet_container, SearchHistoryFragment.newInstance())
                 ?.commit()
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         setBottomSheetBehavior(bottomSheet = bottom_sheet_container)
         model.getData().observe(viewLifecycleOwner, observer)
-
-        textInputLayoutTranslate.setEndIconOnClickListener {
-            isNetworkAvailable = isOnline(requireActivity().applicationContext)
-            if (isNetworkAvailable) {
-                model.getTranslationData(editTextTranslate.text.toString(), isNetworkAvailable)
-            } else {
-                showAlertDialog(
-                    "No Internet",
-                    "You can not use app without internet connection. Please, checkinternet connection."
-                )
-            }
-        }
+        searchTranslate()
     }
 
     private fun showAlertDialog(title: String?, message: String?) {
@@ -94,7 +89,7 @@ class MainFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 val data = appState.data
-                progressbarFrameLayout.visibility = View.GONE
+                fadeOutAnimation(progressbarFrameLayout)
                 if (data == null || data.isEmpty()) {
                     Toast.makeText(
                         activity,
@@ -104,14 +99,15 @@ class MainFragment : Fragment() {
                     if (adapter == null) {
                         translateRecyclerView.layoutManager =
                             LinearLayoutManager(requireActivity().applicationContext)
-                        translateRecyclerView.adapter = MainAdapter(onListItemClickListener, data, modelAdapter, activity?.applicationContext)
+                        translateRecyclerView.adapter =
+                            MainAdapter(onListItemClickListener, data, modelAdapter, activity?.applicationContext)
                     } else {
                         adapter!!.setData(data)
                     }
                 }
             }
             is AppState.Loading -> {
-                progressbarFrameLayout.visibility = View.VISIBLE
+                fadeInAnimation(progressbarFrameLayout)
             }
             is AppState.Error -> {
                 Toast.makeText(
@@ -126,5 +122,19 @@ class MainFragment : Fragment() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
+    }
+
+    private fun searchTranslate(){
+        textInputLayoutTranslate.setEndIconOnClickListener {
+            isNetworkAvailable = isOnline(requireActivity().applicationContext)
+            if (isNetworkAvailable) {
+                model.getTranslationData(editTextTranslate.text.toString(), isNetworkAvailable)
+            } else {
+                showAlertDialog(
+                    "No Internet",
+                    "You can not use app without internet connection. Please, checkinternet connection."
+                )
+            }
+        }
     }
 }

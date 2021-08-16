@@ -20,7 +20,7 @@ class HistoryFragment: Fragment() {
         fun newInstance() = HistoryFragment()
     }
 
-    private val model: HistoryViewModel by viewModel()
+    private val historyViewModel: HistoryViewModel by viewModel()
     private val observer = Observer<AppState> { renderData(it) }
     private var adapter: HistoryAdapter? = HistoryAdapter()
 
@@ -38,8 +38,8 @@ class HistoryFragment: Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity)
         historyRecyclerView.layoutManager = linearLayoutManager
         historyRecyclerView.adapter = adapter
-        model.getHistoryData("", false)
-        model.getData().observe(viewLifecycleOwner, observer)
+        historyViewModel.getHistoryData("", false)
+        historyViewModel.getData().observe(viewLifecycleOwner, observer)
     }
 
     private fun renderData(appState: AppState){

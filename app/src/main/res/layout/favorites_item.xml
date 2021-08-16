@@ -55,6 +55,17 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:srcCompat="@drawable/ic_expand_more" />
 
+    <ImageView
+        android:id="@+id/imageViewFavoriteItemDeleted"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewFavoritesItemDown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_delete_fully" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutMoreFavorites"
         android:layout_width="0dp"
@@ -114,7 +125,7 @@
             tools:ignore="RtlCompat" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/imageViewCancle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

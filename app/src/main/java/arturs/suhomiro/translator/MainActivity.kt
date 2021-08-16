@@ -2,6 +2,7 @@ package arturs.suhomiro.translator
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import arturs.suhomiro.translator.screens.favorites_screen.FavoritesFragment
 import arturs.suhomiro.translator.screens.history_screen.HistoryFragment
 import arturs.suhomiro.translator.screens.main_screen.MainFragment
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,12 +41,13 @@ class MainActivity : AppCompatActivity() {
                 .replace(
                     R.id.container,
                     HistoryFragment()
-                ).addToBackStack(null).commit()
+                ).addToBackStack("TAG_HISTORY").commit()
             R.id.favorites_btn -> this.supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.container,
-                    FavoritesFragment()
-                ).addToBackStack(null).commit()
+                .remove(MainFragment())
+                    .replace(
+                        R.id.container,
+                        FavoritesFragment()
+                    ).addToBackStack("TAG_FAVORITES").commit()
 
         }
         return super.onOptionsItemSelected(item)
@@ -74,14 +77,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount > 0){
-            supportFragmentManager.popBackStackImmediate();
-        }
-        else{
-            super.onBackPressed();
-        }
+        super.onBackPressed()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, MainFragment.newInstance())
+            .commitNow()
     }
-
 }
+
 
 

@@ -25,6 +25,27 @@ class FavoritesViewModel (
         viewModelCoroutineScope.launch { startInteractor() }
     }
 
+    fun deleteData(favoritesData: FavoritesData) {
+        cancelJob()
+        viewModelCoroutineScope.launch { startInteractorDelete(favoritesData) }
+    }
+
+    fun saveData(favoritesData: FavoritesData) {
+        cancelJob()
+        viewModelCoroutineScope.launch { startInteractorSave(favoritesData) }
+    }
+
+    fun updateData(favoritesData: FavoritesData){
+        cancelJob()
+        viewModelCoroutineScope.launch { startInteractorUpdate(favoritesData) }
+    }
+
+    private suspend fun startInteractorSave(favoritesData: FavoritesData) =
+        withContext(Dispatchers.IO) {
+            favoritesInteractorImpl.saveData(favoritesData)
+
+        }
+
     private suspend fun startInteractor() =
         withContext(Dispatchers.IO) {
             liveDataForViewToObserve.postValue(
@@ -32,12 +53,24 @@ class FavoritesViewModel (
             )
         }
 
+    private suspend fun startInteractorDelete(favoritesData: FavoritesData) =
+        withContext(Dispatchers.IO) {
+            favoritesInteractorImpl.deleteData(favoritesData)
+
+        }
+
+    private suspend fun startInteractorUpdate(favoritesData: FavoritesData) =
+        withContext(Dispatchers.IO) {
+            favoritesInteractorImpl.updateData(favoritesData)
+
+        }
+
     private fun cancelJob() {
         viewModelCoroutineScope.coroutineContext.cancelChildren()
     }
 
     private fun handleError(error: Throwable) {
-
+        throw error
     }
 
     override fun onCleared() {

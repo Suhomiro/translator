@@ -11,18 +11,17 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.recyclerview.widget.RecyclerView
 import arturs.suhomiro.translator.R
 import arturs.suhomiro.translator.model.data.DataModel
-import arturs.suhomiro.translator.screens.AdapterViewModel
+import arturs.suhomiro.translator.screens.favorites_screen.FavoritesViewModel
 import arturs.suhomiro.translator.utils.converterDataModelToFavoritesData
 import arturs.suhomiro.translator.utils.fadeInAnimation
 import arturs.suhomiro.translator.utils.fadeOutAnimation
-import arturs.suhomiro.translator.utils.setAdapterFadeAnimation
 import kotlinx.android.synthetic.main.translate_item.view.*
 
 
 class MainAdapter(
     private var onListItemClickListener: OnListItemClickListener,
     private var data: List<DataModel>,
-    private val model: AdapterViewModel,
+    private val favoritesViewModel: FavoritesViewModel,
     private val context: Context?
     ) :
     RecyclerView.Adapter<MainAdapter.RecyclerItemViewHolder>() {
@@ -64,7 +63,7 @@ class MainAdapter(
             itemView.imageViewTranslateLike.setOnClickListener {
                 fadeInAnimation(itemView.imageViewTranslateLiked)
                 fadeOutAnimation(itemView.imageViewTranslateLike)
-                model.saveData(converterDataModelToFavoritesData(data))
+                favoritesViewModel.saveData(converterDataModelToFavoritesData(data))
                 Toast.makeText(context, "Liked", Toast.LENGTH_SHORT).show()
             }
         }
@@ -73,7 +72,7 @@ class MainAdapter(
             itemView.imageViewTranslateLiked.setOnClickListener {
                 fadeInAnimation(itemView.imageViewTranslateLike)
                 fadeOutAnimation(itemView.imageViewTranslateLiked)
-                model.deleteData(converterDataModelToFavoritesData(data))
+                favoritesViewModel.deleteData(converterDataModelToFavoritesData(data))
                 Toast.makeText(context, "Unliked", Toast.LENGTH_SHORT).show()
             }
         }
