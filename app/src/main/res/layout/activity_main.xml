@@ -2,66 +2,36 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main_screen.MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/white_sheet"
+    >
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutTranslate"
-        android:layout_width="0dp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:endIconCheckable="true"
-        app:endIconDrawable="@drawable/ic_search"
-        app:endIconMode="custom"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:menu="@menu/toolbar_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextTranslate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/translate" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/textViewFromLang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/russian"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutTranslate" />
-
-    <ImageView
-        android:id="@+id/imageViewLanduage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/textViewToLang"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toEndOf="@+id/textViewFromLang"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutTranslate"
-        app:srcCompat="@drawable/ic_baseline_swap_horiz_24" />
-
-    <TextView
-        android:id="@+id/textViewToLang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="60dp"
-        android:text="@string/english"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutTranslate" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/translateRecyclerView"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="?attr/actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewLanduage" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

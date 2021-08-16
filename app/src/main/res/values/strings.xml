@@ -3,4 +3,10 @@
     <string name="translate">Translate</string>
     <string name="russian">Russian</string>
     <string name="english">English</string>
+    <string name="favorites">Favorites</string>
+    <string name="history">History</string>
+    <string name="search_history_offline">Search history offline</string>
+    <string name="save">Save</string>
+    <string name="your_note">Your note</string>
+    <string name="write_your_note">Write your note</string>
 </resources>
